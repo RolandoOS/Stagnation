@@ -9,8 +9,6 @@ from   cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 from   cartopy.feature       import NaturalEarthFeature, COASTLINE, LAKES
 from   netCDF4               import Dataset
 
-caca
-
 PATH = '/Users/rolivas1/Documents/DATA/MERRA_meteorology/'
 file = PATH+'MERRA300.prod.assim.inst3_3d_asm_Cp.20040707.SUB.nc'
 fn   = Dataset(file,mode='r')
