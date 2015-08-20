@@ -87,30 +87,34 @@ print rfr.score(test[factors], test['AmmSO4']) # 0.661268359009
 preds = rfr.predict(test[factors])
 test['preds']=preds
 
-pd.DataFrame(factors, 100*rfr.feature_importances_, columns=['% Imp'])
+
+Importance=pd.DataFrame([pd.Series(factors.values),pd.Series(100*rfr.feature_importances_)]).T
+Importance.columns=['factors','% Importance']
+Importance=Importance.sort(columns='% Importance', ascending=False)
+
 
 g=sns.jointplot('AmmSO4', 'preds', data=test, kind="kde", size=7, space=0, xlim=[-1.5,2], ylim=[-1.5,2])
 x0, x1 = g.ax_joint.get_xlim()
 y0, y1 = g.ax_joint.get_ylim()
 lims = [max(x0, y0), min(x1, y1)]
 g.ax_joint.plot(lims, lims, 'k')
-plt.savefig(PATH_RES+'random_forest_skill_1.png', dpi = 200);
+#plt.savefig(PATH_RES+'random_forest_skill_1.png', dpi = 200);
 plt.show()
 plt.clf()
 
 plt.switch_backend('MacOSX')
 test['2005'][['AmmSO4','preds']].resample('d', how='mean').plot(marker='o')
-plt.savefig(PATH_RES+'random_forest_skill_2.png', dpi = 200);
+#plt.savefig(PATH_RES+'random_forest_skill_2.png', dpi = 200);
 plt.show()
 
 plt.switch_backend('MacOSX')
 test['2005'][['AmmSO4','spec_humidity','slp']].resample('d', how='mean').plot()
-plt.savefig(PATH_RES+'random_forest_meteorology.png', dpi = 200);
+#plt.savefig(PATH_RES+'random_forest_meteorology.png', dpi = 200);
 plt.show()
 
 # --- Random Forest Classifier -----------------------------------------
 
-stag_treshold=15  #ug/m^3
+stag_treshold=15  # ug/m^3
 
 df=DAT.ix[:,[0,1,2,3,4,5,6,7,8,11]]
 df['is_stagnant']=0;
