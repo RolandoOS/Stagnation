@@ -114,28 +114,27 @@ plt.show()
 
 # --- Random Forest Classifier -----------------------------------------
 
-stag_treshold=15  # ug/m^3
+stag_treshold=20  # ug/m^3
 
-df=DAT.ix[:,[0,1,2,3,4,5,6,7,8,11]]
-df['is_stagnant']=0;
-df.loc[df['AmmSO4'] > stag_treshold, 'is_stagnant'] = 1
-# df['is_stagnant'][df['PM25']>30]=1
+data['is_stagnant']=0;
+data.loc[data['AmmSO4'] > stag_treshold, 'is_stagnant'] = 1
 
-df['is_train'] = np.random.uniform(0, 1, len(df)) <= 0.8
+data['is_train'] = np.random.uniform(0, 1, len(data)) <= 0.80
 
-train, test = df[df['is_train']==True], df[df['is_train']==False]
+train, test = data[data['is_train']==True], data[data['is_train']==False]
 
-factors = df.columns[:9]
+factors = data.columns[:7]
 begin=time()
 clf = RandomForestClassifier(n_estimators=1000, n_jobs=10)
-y = train['is_stagnant']
+y = train['AmmSO4']
 clf.fit(train[factors], y)
 print time()-begin
 
-print clf.score(test[factors], test['is_stagnant']) # 0.978
+print clf.score(test[factors], test['AmmSO4']) # 
 
 preds = clf.predict(test[factors])
 print pd.crosstab(test['is_stagnant'], preds, rownames=['actual'], colnames=['preds'])
+
 
 #        | preds
 # actual | clear  stagn
@@ -143,6 +142,32 @@ print pd.crosstab(test['is_stagnant'], preds, rownames=['actual'], colnames=['pr
 # clear  | 41458    20
 # stagn  |   872   214
 
+preds = clf.predict(test[factors])
+test['preds']=preds
+
+Importance=pd.DataFrame([pd.Series(factors.values),pd.Series(100*rfr.feature_importances_)]).T
+Importance.columns=['factors','% Importance']
+Importance=Importance.sort(columns='% Importance', ascending=False)
+
+
+g=sns.jointplot('AmmSO4', 'preds', data=test, kind="kde", size=7, space=0, xlim=[-1.5,2], ylim=[-1.5,2])
+x0, x1 = g.ax_joint.get_xlim()
+y0, y1 = g.ax_joint.get_ylim()
+lims = [max(x0, y0), min(x1, y1)]
+g.ax_joint.plot(lims, lims, 'k')
+#plt.savefig(PATH_RES+'random_forest_skill_3.png', dpi = 200);
+plt.show()
+plt.clf()
+
+plt.switch_backend('MacOSX')
+test['2005'][['AmmSO4','preds']].resample('d', how='mean').plot(marker='o')
+#plt.savefig(PATH_RES+'random_forest_skill_4.png', dpi = 200);
+plt.show()
+
+plt.switch_backend('MacOSX')
+test['2005'][['AmmSO4','spec_humidity','slp']].resample('d', how='mean').plot()
+#plt.savefig(PATH_RES+'random_forest_meteorology_2.png', dpi = 200);
+plt.show()
 # ----------------------------------------------------------------------
 
 iris = load_iris()
@@ -161,5 +186,3 @@ clf.fit(train[features], y)
 preds = iris.target_names[clf.predict(test[features])]
 pd.crosstab(test['species'], preds, rownames=['actual'], colnames=['preds'])
 
-
-random_forest_meteorology.png random_forest_skill_1.png random_forest_skill_2.png scatter_matrix_1.png scatter_matrix_corr_1.png scatter_matrix_corr_2.png
