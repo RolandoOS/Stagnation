@@ -33,10 +33,6 @@ PM = PM.set_index('date')
 
 date = pd.DatetimeIndex(PM.index.values)
 
-# Regions:
-# N/S 40N
-# West < -105W
-# East > - 90W
 
 # ----------------------------------------------------------------------
 # Locate gridpoint inside US
@@ -205,7 +201,7 @@ for i in date:
 	
 	# ------------------------------------------------------------------
 	
-	PER=pd.DataFrame.from_items([('u_500hPa',u5i[maskota]),('v_500hPa',v5i[maskota]),('hgt_500hPa',hgti[maskota]),('precip',prei[maskota]),('u_2m',u2i[maskota]),('v_2m',v2i[maskota]),('temp_2m',t2i[maskota]),('spec_humidity',q2i[maskota]),('slp',s2i[maskota]),('dust',PM1[maskota]),('sea_salt',PM2[maskota]),('AmmSO4',PM3[maskota]),('OC',PM4[maskota]),('BC',PM5[maskota]),('PM25',PM25[maskota])])
+	PER=pd.DataFrame.from_items([('u_500hPa',u5i[maskota]),('v_500hPa',v5i[maskota]),('hgt_500hPa',hgti[maskota]),('precip',prei[maskota]),('u_2m',u2i[maskota]),('v_2m',v2i[maskota]),('temp_2m',t2i[maskota]),('spec_humidity',q2i[maskota]),('slp',s2i[maskota]),('dust',PM1[maskota]),('sea_salt',PM2[maskota]),('AmmSO4',PM3[maskota]),('OC',PM4[maskota]),('BC',PM5[maskota]),('PM25',PM25[maskota]),('lat',lata[maskota]),('lon',lona[maskota])])
 
 	PER['date']=i
 	
