@@ -25,7 +25,7 @@ from time import time
 
 print plt.get_backend()
 
-sns.set(style="white", font="monospace")
+sns.set(style="white")
 
 # Directory paths:
 
@@ -63,13 +63,38 @@ reg_SW=data[(data['lat']<40) & (data['lon']<-105)]
 reg_SC=data[(data['lat']<40) & (data['lon']>-105) & (data['lon']<-90)]
 reg_SE=data[(data['lat']<40) & (data['lon']>-90)]
 
+def plot_corr(data,name):
+	plt.switch_backend('Agg')
+	sns.heatmap(data, annot=True, square=True, cmap='BrBG', cbar_kws={"shrink": .75})
+	plt.savefig(PATH_RES+name, dpi = 200, bbox_inches='tight');
+	plt.show()
+	plt.clf()
 
-plt.switch_backend('Agg')
-sns.heatmap(reg_NW.ix[:,[0,1,2,3,4,5,6,7]].corr(), annot=True, square=True, cmap='BrBG', cbar_kws={"shrink": .75})
-plt.savefig(PATH_RES+'corr_matrix_NW_AmmSO4.png', dpi = 200);
-plt.show()
-plt.clf()
+plot_corr(reg_NW.ix[:,[0,1,2,3,4,5,6,7]].corr(),'corr_matrix_NW_AmmSO4.png')
+plot_corr(reg_NW.ix[:,[0,1,2,3,4,5,6,8]].corr(),'corr_matrix_NW_OC.png')
+plot_corr(reg_NW.ix[:,[0,1,2,3,4,5,6,9]].corr(),'corr_matrix_NW_PM2.5.png')
 
+plot_corr(reg_NC.ix[:,[0,1,2,3,4,5,6,7]].corr(),'corr_matrix_NC_AmmSO4.png')
+plot_corr(reg_NC.ix[:,[0,1,2,3,4,5,6,8]].corr(),'corr_matrix_NC_OC.png')
+plot_corr(reg_NC.ix[:,[0,1,2,3,4,5,6,9]].corr(),'corr_matrix_NC_PM2.5.png')
+
+plot_corr(reg_NE.ix[:,[0,1,2,3,4,5,6,7]].corr(),'corr_matrix_NE_AmmSO4.png')
+plot_corr(reg_NE.ix[:,[0,1,2,3,4,5,6,8]].corr(),'corr_matrix_NE_OC.png')
+plot_corr(reg_NE.ix[:,[0,1,2,3,4,5,6,9]].corr(),'corr_matrix_NE_PM2.5.png')
+
+plot_corr(reg_SW.ix[:,[0,1,2,3,4,5,6,7]].corr(),'corr_matrix_SW_AmmSO4.png')
+plot_corr(reg_SW.ix[:,[0,1,2,3,4,5,6,8]].corr(),'corr_matrix_SW_OC.png')
+plot_corr(reg_SW.ix[:,[0,1,2,3,4,5,6,9]].corr(),'corr_matrix_SW_PM2.5.png')
+
+plot_corr(reg_SC.ix[:,[0,1,2,3,4,5,6,7]].corr(),'corr_matrix_SC_AmmSO4.png')
+plot_corr(reg_SC.ix[:,[0,1,2,3,4,5,6,8]].corr(),'corr_matrix_SC_OC.png')
+plot_corr(reg_SC.ix[:,[0,1,2,3,4,5,6,9]].corr(),'corr_matrix_SC_PM2.5.png')
+
+plot_corr(reg_SE.ix[:,[0,1,2,3,4,5,6,7]].corr(),'corr_matrix_SE_AmmSO4.png')
+plot_corr(reg_SE.ix[:,[0,1,2,3,4,5,6,8]].corr(),'corr_matrix_SE_OC.png')
+plot_corr(reg_SE.ix[:,[0,1,2,3,4,5,6,9]].corr(),'corr_matrix_SE_PM2.5.png')
+
+reg_NW['PM25']['2002'].resample('d', how='mean').plot(); plt.show()
 
 # --- Test variables with GLM ------------------------------------------
 
